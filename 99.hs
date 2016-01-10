@@ -1,4 +1,5 @@
 import Data.List
+import System.Random
 
 -- Find the last element of a list.
 myLastElem :: [a] -> a
@@ -144,3 +145,26 @@ myDropAt n list
 	| (n < 1) || (n > length list) = list
 	| n == 1 = drop 1 list
 	| otherwise = take (n-1) list ++ drop n list
+
+-- P21: Insert an element at a given position into a list.
+myInsertAt :: Char -> String -> Int -> String
+myInsertAt c str n
+	| n < 1 = str
+	| n == 1 = c : str
+	| otherwise = take (n-1) str ++ [c] ++ drop (n-1) str
+
+-- P22: Create a list containing all integers within a given range.
+myRange :: Int -> Int -> [Int]
+myRange from to
+	| to < from = from : myRange (from - 1) to
+	| to == from = [to]
+	| otherwise = from : myRange (from + 1) to
+
+-- P23: Extract a given number of randomly selected elements from a list.
+myRandSelect :: [a] -> Int -> IO [a] 
+myRandSelect [] _ = return []
+myRandSelect _ 0 = return []
+myRandSelect xs n = do
+			r <- randomRIO (0, length xs - 1)
+			rest <- myRandSelect xs (n-1)
+			return ((xs !! r) : rest)
